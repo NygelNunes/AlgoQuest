@@ -1,0 +1,29 @@
+%%{init: {'sequence': {'width': 130, 'actorMargin': 24, 'messageMargin': 26, 'noteMargin': 6, 'boxMargin': 6, 'wrap': true, 'mirrorActors': false}}}%%
+sequenceDiagram
+    autonumber
+    actor C as Cliente
+    participant R as Resolvedor<br/>UsuarioAutenticado
+    participant SA as Servico<br/>Autenticacao
+    participant RP as Repositorios<br/>Sessao e Usuario
+    participant AC as Admin<br/>Controller
+    participant AD as Servico<br/>Admin
+
+    C->>R: GET /api/admin/usuarios<br/>Authorization: Bearer token
+    R->>SA: autenticar(cabeçalho)
+    SA->>RP: sessão válida para SHA-256(token)?
+    RP-->>SA: idUsuario ou nulo
+    alt token ausente, inválido ou expirado
+        SA-->>C: 401 (ErroApi.naoAutenticado)
+    else sessão válida
+        SA->>RP: buscarPorId(idUsuario)
+        RP-->>SA: Usuario com papel lido do BANCO
+        SA-->>R: Usuario
+        R->>AC: usuarios(Usuario)
+        AC->>AD: listarUsuarios(ator)
+        alt papel não é MASTER
+            AD-->>C: 403 (ErroApi.proibido)
+        else papel MASTER
+            AD-->>C: 200 lista de usuários
+        end
+    end
+    Note over R,AD: O papel nunca vem da requisição: é relido do banco a cada chamada.<br/>Rebaixar um administrador vale na hora, mesmo com o mesmo token.

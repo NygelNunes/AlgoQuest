@@ -1,0 +1,26 @@
+classDiagram
+    direction TB
+
+    class UsuarioRepositorio {
+        <<Repository>>
+        +salvar(Usuario u)
+        +buscarPorId(int id) Usuario
+        +buscarPorNome(String nome) Usuario
+        +buscarPorIdParaAtualizar(int id) Usuario
+        +atualizarPapel(int id, Papel papel)
+        +atualizarAvatar(int id, avatar, imagem)
+        +definirAvatarSeVazio(int id, avatar) boolean
+        +buscarAvatarImagem(int id) String
+    }
+    class ModuloRepositorio {
+        <<Repository>>
+        +buscarModulosAtivos() List~Modulo~
+        +buscarAtivoPorId(int id) Modulo
+        +buscarExercicioPorId(int id) Exercicio
+    }
+
+    note for UsuarioRepositorio "buscarPorIdParaAtualizar = SELECT ... FOR<br/>UPDATE<br/>(trava a linha na transação de resposta).<br/>definirAvatarSeVazio = UPDATE ... WHERE<br/>avatar IS NULL<br/>(atômico: nunca troca um avatar já<br/>escolhido).<br/>salvar() grava só nome, senha, pontos, xp e<br/>nível:<br/>não sobrescreve papel nem avatar."
+    note for ModuloRepositorio "Agregado: carrega Modulo + Exercicios +<br/>alternativas.<br/>Só enxerga módulos com ativo = TRUE."
+
+    style UsuarioRepositorio fill:#ffedd5,stroke:#c2410c,stroke-width:2px,color:#000
+    style ModuloRepositorio fill:#ffedd5,stroke:#c2410c,stroke-width:2px,color:#000

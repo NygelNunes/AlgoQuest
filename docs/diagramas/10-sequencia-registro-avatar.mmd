@@ -1,0 +1,26 @@
+%%{init: {'sequence': {'width': 130, 'actorMargin': 24, 'messageMargin': 26, 'noteMargin': 6, 'boxMargin': 6, 'wrap': true, 'mirrorActors': false}}}%%
+sequenceDiagram
+    autonumber
+    actor C as Cliente
+    participant SA as Servico<br/>Autenticacao
+    participant H as HashSenha
+    participant AV as Servico<br/>Avatar
+    participant UR as Usuario<br/>Repositorio
+    participant SR as Sessao<br/>Repositorio
+
+    C->>SA: POST /api/auth/registrar<br/>{nomeUsuario, senha}
+    SA->>SA: valida nome (3 a 50, letras, números, . _ -)<br/>e senha (8 a 128)
+    SA->>UR: buscarPorNome(nome)
+    alt nome já existe
+        SA-->>C: 409 nome em uso
+    else nome livre
+        SA->>H: gerar(senha) → hash PBKDF2
+        SA->>AV: sortearPadrao(nome)
+        Note right of AV: Avatar.padraoPara: nome termina em "a" → grupo FEMININOS, senão MASCULINOS. Monstros nunca entram.
+        AV-->>SA: id do retrato
+        SA->>UR: salvar(Usuario, papel USUARIO, avatar)
+        Note right of UR: UNIQUE(nome_usuario) fecha a corrida: DuplicateKeyException vira 409
+        SA->>SR: criar(SHA-256(token), idUsuario, agora + 12 h)
+        SA-->>C: 201 {id, avatar, papel, token}
+    end
+    Note over C,SR: Login de conta antiga sem avatar: garantirAvatar faz UPDATE ... WHERE avatar IS NULL (atômico). Quem já tem avatar nunca é sorteado de novo.

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#07080b"><link rel="preload" href="assets/fonts/unifrakturcook-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/cinzel-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/inter-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="css/assets.css"><link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/avatares.css"><link rel="stylesheet" href="css/tema.css"><script src="js/avatares-catalogo.js"></script><script src="js/tema.js"></script><link rel="stylesheet" href="css/lab.css"><link rel="stylesheet" href="css/fantasia.css"><title>AlgoQuest - Exercício</title></head>
+<body class="pagina-app" data-perfil="compacto">
+  <div class="app app--foco">
+    <aside id="menu"></aside>
+    <aside id="perfil" aria-label="Personagem"></aside>
+    <main class="conteudo" id="conteudo">
+      <a class="voltar" href="modulos.html"><i class="ic i-arrow-right" aria-hidden="true"></i>Voltar à Central de Desafios</a>
+      <section class="desafio superficie" id="desafio" aria-labelledby="descricao">
+        <header class="desafio__cab">
+          <div class="desafio__mod"><span id="moduloSelo"></span><span id="moduloNome">Módulo</span></div>
+          <div class="desafio__linha"><span class="desafio__num" id="numero"></span>
+            <div class="trilha" id="trilha" role="progressbar" aria-label="Progresso no módulo" aria-valuemin="0" aria-valuenow="0"><i id="barra"></i></div>
+            <span id="dificuldade"></span><span class="pontos" id="pontos"></span></div>
+        </header>
+        <div class="desafio__corpo" id="corpo">
+          <div class="pergunta"><h2 id="descricao">Carregando exercício...</h2></div>
+          <figure class="pergunta__visual" id="visual" hidden></figure>
+          <div class="opcoes" id="opcoes"></div>
+          <div class="vernapratica" id="vernapratica" hidden></div>
+          <p class="feedback" id="feedback" role="status" hidden></p>
+        </div>
+        <div class="acoes"><button class="btn btn--fantasma" id="btnAnterior" type="button" hidden>Anterior</button>
+          <button class="btn btn--primario" id="btnProximo" type="button" hidden>Próximo desafio</button>
+          <a class="btn btn--primario" id="btnConcluir" href="modulos.html" hidden>Voltar à Central de Desafios</a></div>
+      </section>
+    </main>
+  </div>
+  <script src="js/api.js"></script><script src="js/arte.js"></script><script src="js/ui.js"></script><script src="js/avatares.js"></script><script src="js/exercicio.js"></script>
+</body></html>

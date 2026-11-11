@@ -1,0 +1,82 @@
+import subprocess, time, re, io, os, sys, json, base64
+from playwright.sync_api import sync_playwright
+from PIL import Image
+os.makedirs("/tmp/shots", exist_ok=True)
+srv = subprocess.Popen([sys.executable, "dev-tools/mock-api/mock-api.py"]); time.sleep(1.2)
+BASE = "http://127.0.0.1:5500/"; R = []
+def ck(nome, cond, extra=""):
+    R.append((nome, bool(cond))); print(("PASS " if cond else "FAIL ") + nome + (" -> " + str(extra) if extra else ""))
+FEM = set(re.findall(r'"([a-z0-9_]+)"', re.search(r"FEMININOS = \{(.*?)\};", open("src/main/java/algoquest/model/AvatarIds.java").read(), re.S).group(1)))
+def png_bytes(w=600, h=400, cor=(30, 120, 200)):
+    im = Image.new("RGB", (w, h), cor)
+    for x in range(0, w, 40): im.paste((220, 180, 60), (x, 0, x + 20, h))
+    b = io.BytesIO(); im.save(b, "PNG"); return b.getvalue()
+def sessao_avatar(pg): return pg.evaluate("JSON.parse(sessionStorage.getItem('aq_usuario')).avatar")
+def retrato(pg): return pg.eval_on_selector("#retrato", "e=>e.getAttribute('src')")
+def cadastrar(pg, nome, senha="senha-forte-1"):
+    pg.goto(BASE + "index.html"); pg.click("#btnModo"); pg.fill("#usuario", nome); pg.fill("#senha", senha); pg.click("#btnEntrar")
+    pg.wait_for_url("**/modulos.html"); pg.wait_for_selector("#retrato")
+def sair(pg): pg.click("#btnSair"); pg.wait_for_url("**/index.html")
+def entrar(pg, nome, senha="senha-forte-1"):
+    pg.goto(BASE + "index.html"); pg.fill("#usuario", nome); pg.fill("#senha", senha); pg.click("#btnEntrar"); pg.wait_for_url("**/modulos.html"); pg.wait_for_selector("#retrato")
+try:
+    with sync_playwright() as p:
+        b = p.chromium.launch(); ctx = b.new_context(viewport={"width": 1366, "height": 800}); pg = ctx.new_page()
+        erros = []; pg.on("pageerror", lambda e: erros.append(str(e)))
+        femin = []; masc = []
+        for n in ["Ana", "Marcia", "Julia"]:
+            ctx.clear_cookies(); pg.goto(BASE + "index.html"); pg.evaluate("sessionStorage.clear()"); cadastrar(pg, n + str(int(time.time()*1000) % 1000) + "a" if False else n + "a"[:0] + str(len(femin)) + "a"); femin.append(sessao_avatar(pg)); sair(pg)
+        for n in ["Joao", "Pedro", "Carlos"]:
+            pg.evaluate("sessionStorage.clear()"); cadastrar(pg, n + str(len(masc))); masc.append(sessao_avatar(pg)); sair(pg)
+        ck("1. nome terminado em 'a' recebe avatar feminino", all(a in FEM for a in femin), femin)
+        ck("2. outros nomes recebem avatar masculino (fora do grupo F, sem monstro)", all(a not in FEM and not a.startswith("monster") for a in masc), masc)
+        pg.evaluate("sessionStorage.clear()"); cadastrar(pg, "Beatriz"); padrao = sessao_avatar(pg); src0 = retrato(pg)
+        ck("3. avatar padrao exibido no perfil", padrao in src0, src0)
+        sair(pg); entrar(pg, "Beatriz"); ck("3b. login NAO sorteia de novo (mesmo avatar)", sessao_avatar(pg) == padrao and padrao in retrato(pg))
+        pg.click("#btnAvatar"); pg.wait_for_selector("dialog.av[open]")
+        ck("5. tres categorias", pg.locator(".av__aba").count() == 3, pg.locator(".av__aba").all_inner_texts())
+        pg.screenshot(path="/tmp/shots/galeria_desktop.png")
+        ck("5b. 16 retratos por categoria", pg.locator(".av__card").count() == 16)
+        ck("4. confirmar desabilitado sem mudanca", pg.is_disabled("#avConfirmar"))
+        pg.click(".av__aba[data-cat=aldeoes]"); pg.click(".av__card >> nth=1"); ck("5c. selecao mostra feedback visual", pg.locator(".av__card.is-sel").count() == 1 and not pg.is_disabled("#avConfirmar"))
+        pg.click("#avConfirmar"); pg.wait_for_selector("dialog.av", state="detached"); novo = sessao_avatar(pg)
+        ck("4b. troca de avatar existente", novo != padrao and novo in retrato(pg), novo)
+        pg.click("#btnAvatar"); pg.click(".av__aba[data-cat=monstros]"); pg.screenshot(path="/tmp/shots/galeria_monstros.png"); pg.click(".av__card[data-id=monster_07_dragon]"); pg.click("#avConfirmar"); pg.wait_for_selector("dialog.av", state="detached")
+        ck("6. monstro escolhido manualmente", sessao_avatar(pg) == "monster_07_dragon" and "monster_07_dragon" in retrato(pg))
+        pg.reload(); pg.wait_for_selector("#retrato"); time.sleep(.5); ck("8. persiste apos recarregar", "monster_07_dragon" in retrato(pg))
+        sair(pg); entrar(pg, "Beatriz"); ck("9. persiste apos logout/login", "monster_07_dragon" in retrato(pg))
+        pg.click("#btnAvatar"); pg.click("#avUpload"); pg.set_input_files("#avArq", {"name": "x.png", "mimeType": "image/png", "buffer": png_bytes()}); pg.wait_for_selector("#avCanvas:visible")
+        pg.fill("#avZoom", "2"); pg.dispatch_event("#avZoom", "input")
+        box = pg.locator("#avVisor").bounding_box(); pg.mouse.move(box["x"] + 100, box["y"] + 100); pg.mouse.down(); pg.mouse.move(box["x"] + 60, box["y"] + 80, steps=5); pg.mouse.up()
+        pg.screenshot(path="/tmp/shots/recorte_desktop.png")
+        pg.click("#avSalvar"); pg.wait_for_selector("dialog.av", state="detached")
+        img = pg.eval_on_selector("#retrato", "e=>e.src"); ck("7. imagem recortada salva e exibida", img.startswith("data:image/jpeg;base64,") and sessao_avatar(pg) == "personalizado")
+        dim = Image.open(io.BytesIO(base64.b64decode(img.split(",")[1]))).size; ck("7b. saida quadrada 384x384", dim == (384, 384), dim)
+        pg.reload(); pg.wait_for_selector("#retrato"); time.sleep(.5); ck("8b. personalizado persiste no reload", pg.eval_on_selector("#retrato", "e=>e.src").startswith("data:image/jpeg"))
+        sair(pg); entrar(pg, "Beatriz"); ck("9b. personalizado persiste apos logout/login", pg.eval_on_selector("#retrato", "e=>e.src").startswith("data:image/jpeg"))
+        pg.click("#btnAvatar"); pg.click("#avUpload"); pg.set_input_files("#avArq", {"name": "x.gif", "mimeType": "image/gif", "buffer": b"GIF89a"}); ck("10a. formato invalido recusado", "suportado" in pg.inner_text("#avMsg"))
+        pg.set_input_files("#avArq", {"name": "g.png", "mimeType": "image/png", "buffer": b"\x89PNG" + b"0" * (5 * 1024 * 1024 + 10)}); ck("10b. arquivo > 5 MB recusado", "grande" in pg.inner_text("#avMsg"))
+        pg.keyboard.press("Escape")
+        tok = pg.evaluate("JSON.parse(sessionStorage.getItem('aq_usuario')).token")
+        def post(path, body, t=tok):
+            return pg.evaluate("""async ([p,b,t])=>{const h={'Content-Type':'application/json'};if(t)h.Authorization='Bearer '+t;const r=await fetch('http://127.0.0.1:8080/api'+p,{method:'POST',headers:h,body:JSON.stringify(b)});return r.status}""", [path, body, t])
+        ck("API: id invalido -> 400", post("/auth/me/avatar", {"avatar": "../../etc/passwd"}) == 400)
+        ck("API: sem token -> 401", post("/auth/me/avatar", {"avatar": "hero_01_knight"}, None) == 401)
+        ck("API: svg/html recusado -> 400", post("/auth/me/avatar/personalizado", {"imagem": "data:image/svg+xml;base64,PHN2Zz4="}) == 400)
+        ck("API: bytes falsos como jpeg -> 400", post("/auth/me/avatar/personalizado", {"imagem": "data:image/jpeg;base64," + base64.b64encode(b"nao sou imagem").decode()}) == 400)
+        ck("API: nome duplicado no cadastro -> 409", post("/auth/registrar", {"nomeUsuario": "Beatriz", "senha": "senha-forte-1"}, None) == 409)
+        m = b.new_context(viewport={"width": 360, "height": 740}, device_scale_factor=2, has_touch=True, is_mobile=True); mp = m.new_page()
+        mp.goto(BASE + "index.html"); mp.fill("#usuario", "Beatriz"); mp.fill("#senha", "senha-forte-1"); mp.click("#btnEntrar"); mp.wait_for_url("**/modulos.html"); mp.wait_for_selector("#retrato")
+        ck("10. mobile: pagina sem overflow horizontal", mp.evaluate("document.documentElement.scrollWidth<=innerWidth"))
+        mp.click("#btnAvatar"); mp.wait_for_selector("dialog.av[open]"); time.sleep(.3); mp.screenshot(path="/tmp/shots/galeria_mobile.png")
+        ov = mp.evaluate("(()=>{const d=document.querySelector('dialog.av');const g=document.querySelector('.av__grade');return [d.scrollWidth<=d.clientWidth, g.scrollWidth<=g.clientWidth, document.querySelector('.av__rodape').getBoundingClientRect().bottom<=innerHeight+1]})()")
+        ck("10b. mobile: galeria sem overflow, rodape visivel", all(ov), ov)
+        ck("10c. mobile: abas visiveis e clicaveis", mp.locator(".av__aba").nth(2).bounding_box()["x"] + 1 >= 0)
+        mp.click("#avUpload"); mp.set_input_files("#avArq", {"name": "x.png", "mimeType": "image/png", "buffer": png_bytes(500, 900)}); mp.wait_for_selector("#avCanvas:visible"); time.sleep(.2); mp.screenshot(path="/tmp/shots/recorte_mobile.png")
+        v = mp.evaluate("(()=>{const r=document.querySelector('.av__visor').getBoundingClientRect(), f=document.querySelector('.av__rodape').getBoundingClientRect(); return [r.width<=innerWidth, f.bottom<=innerHeight+1, document.documentElement.scrollWidth<=innerWidth]})()")
+        ck("10d. mobile: recorte cabe na tela", all(v), v)
+        ck("sem erros de JS na pagina", not erros, erros)
+        b.close()
+finally:
+    srv.terminate()
+f = [n for n, ok in R if not ok]; print(f"\n{len(R)-len(f)}/{len(R)} passaram"); sys.exit(1 if f else 0)

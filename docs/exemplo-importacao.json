@@ -1,0 +1,20 @@
+{
+  "modulo": "Algoritmos de Busca",
+  "questoes": [
+    {
+      "descricao": "Qual é a complexidade da busca binária no pior caso?",
+      "dificuldade": "MEDIO",
+      "pontos": 20,
+      "opcoes": ["O(n)", "O(1)", "O(log n)", "O(n²)"],
+      "indiceCorreto": 2,
+      "explicacao": "A cada comparação, metade do espaço de busca é descartada."
+    },
+    {
+      "descricao": "Exemplo de questão com diagrama SVG (campo visual é opcional).",
+      "dificuldade": "FACIL",
+      "opcoes": ["Sim", "Não"],
+      "indiceCorreto": 0,
+      "visual": "<svg viewBox=\"0 0 120 60\"><circle cx=\"30\" cy=\"30\" r=\"14\" fill=\"none\" stroke=\"#dcc084\" stroke-width=\"3\"/><path d=\"M44 30H90\" stroke=\"#dcc084\" stroke-width=\"3\"/></svg>"
+    }
+  ]
+}

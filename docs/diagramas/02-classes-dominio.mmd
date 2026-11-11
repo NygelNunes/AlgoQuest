@@ -1,0 +1,92 @@
+classDiagram
+    direction TB
+
+    class Usuario {
+        +int XP_POR_NIVEL = 100
+        -int id
+        -String nomeUsuario
+        -String senha «hash PBKDF2»
+        -int pontuacao
+        -int xp
+        -int nivel
+        -Papel papel
+        -String avatar «id do catálogo ou "personalizado"»
+        -String avatarImagem «carregado só sob demanda»
+        +adicionarPontos(int pontos)
+        +adicionarXp(int xp) «sobe de nível enquanto xp ≥ nivel × 100»
+        +subirNivel()
+        +getXpProximoNivel() int
+    }
+
+    class Papel {
+        <<enumeration>>
+        USUARIO
+        ADMIN
+        MASTER
+        +podeAdministrarConteudo() boolean
+        +podeGerenciarUsuarios() boolean
+        +de(String texto)$ Papel
+        +validarAlteracao(ator, alvo, novo)$ String
+    }
+
+    class ProgressoUsuario {
+        -int idUsuario
+        -List~Integer~ exerciciosConcluidos
+        +marcarExercicioConcluido(int idExercicio)
+        +isConcluido(int idExercicio) boolean
+    }
+
+    class Modulo {
+        -int id
+        -String titulo
+        -String descricao
+        -String tema «chave da ilustração SVG»
+        -List~Exercicio~ exercicios
+        +adicionarExercicio(Exercicio e)
+        +getQuantidadeExercicios() int
+        +calcularPorcentagem(ProgressoUsuario p) double
+    }
+
+    class Exercicio {
+        <<abstract>>
+        -int id
+        -String descricao
+        -Dificuldade dificuldade
+        -int pontos
+        -String textoFeedback
+        -String visual «imagem ou SVG validado»
+        +verificarResposta(Object resposta)* boolean
+    }
+
+    class ExercicioMultiplaEscolha {
+        -List~String~ opcoes
+        -int indiceCorreto
+        +verificarResposta(Object resposta) boolean
+        -converterIndice(Object resposta) int
+    }
+
+    class Dificuldade {
+        <<enumeration>>
+        FACIL
+        MEDIO
+        DIFICIL
+    }
+
+    Usuario "1" --> "1" Papel : tem
+    ProgressoUsuario "0..1" .. "1" Usuario : ligado por idUsuario
+    Modulo "1" o-- "0..*" Exercicio : agrega
+    Exercicio <|-- ExercicioMultiplaEscolha : estende
+    Exercicio "*" --> "1" Dificuldade
+    Modulo ..> ProgressoUsuario : calcula % concluída
+
+    note for Modulo "Raiz do agregado. ordem e ativo existem só<br/>no banco<br/>(ConteudoRepositorio), não nesta classe.<br/>ModuloRepositorio carrega o módulo com seus<br/>exercícios."
+    note for ProgressoUsuario "Guarda só o id do usuário,<br/>nunca o objeto Usuario."
+    note for ExercicioMultiplaEscolha "Única subclasse hoje. Novo tipo de exercício<br/>=<br/>nova subclasse com sua verificarResposta."
+
+    style Usuario fill:#ede9fe,stroke:#6d28d9,stroke-width:2px,color:#000
+    style ProgressoUsuario fill:#ede9fe,stroke:#6d28d9,stroke-width:2px,color:#000
+    style Modulo fill:#ede9fe,stroke:#6d28d9,stroke-width:2px,color:#000
+    style Exercicio fill:#ede9fe,stroke:#6d28d9,stroke-width:2px,color:#000
+    style ExercicioMultiplaEscolha fill:#ede9fe,stroke:#6d28d9,stroke-width:2px,color:#000
+    style Papel fill:#ffedd5,stroke:#c2410c,stroke-width:2px,color:#000
+    style Dificuldade fill:#ffedd5,stroke:#c2410c,stroke-width:2px,color:#000

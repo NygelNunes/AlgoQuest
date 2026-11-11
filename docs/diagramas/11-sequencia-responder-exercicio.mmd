@@ -1,0 +1,34 @@
+%%{init: {'sequence': {'width': 130, 'actorMargin': 24, 'messageMargin': 26, 'noteMargin': 6, 'boxMargin': 6, 'wrap': true, 'mirrorActors': false}}}%%
+sequenceDiagram
+    autonumber
+    actor C as Cliente
+    participant SR as Servico<br/>Resposta
+    participant MR as Modulo<br/>Repositorio
+    participant EX as Exercicio
+    participant UR as Usuario<br/>Repositorio
+    participant PR as Progresso<br/>Repositorio
+    participant SG as Servico<br/>Gamificacao
+
+    C->>SR: POST /api/modulos/exercicios/{id}/resposta
+    SR->>MR: buscarExercicioPorId(id)
+    MR-->>SR: Exercicio (só de módulo ativo) ou nulo
+    SR->>EX: verificarResposta(resposta)
+    Note right of EX: Polimorfismo: ExercicioMultiplaEscolha compara com indiceCorreto. Resposta malformada → 400.
+    alt resposta errada
+        SR-->>C: 200 {correta: false, pontosGanhos: 0}
+    else resposta correta
+        rect rgb(224, 242, 254)
+            Note over SR,SG: Transação (TransactionTemplate)
+            SR->>UR: buscarPorIdParaAtualizar(id) = SELECT ... FOR UPDATE
+            SR->>PR: buscarPorUsuario(id)
+            alt ainda não concluído por este usuário
+                SR->>PR: registrarConclusao(usuário, exercício)
+                SR->>SG: processarRespostaCorreta(usuário, exercício)
+                Note right of SG: +pontos e +XP. Usuario.adicionarXp sobe de nível enquanto xp ≥ nivel × 100
+                SR->>UR: salvar(usuario)
+            else já concluído
+                Note right of SR: não premia de novo
+            end
+        end
+        SR-->>C: 200 {correta: true, feedback, pontosGanhos, usuario}
+    end

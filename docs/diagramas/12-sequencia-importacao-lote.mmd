@@ -1,0 +1,33 @@
+%%{init: {'sequence': {'width': 130, 'actorMargin': 24, 'messageMargin': 26, 'noteMargin': 6, 'boxMargin': 6, 'wrap': true, 'mirrorActors': false}}}%%
+sequenceDiagram
+    autonumber
+    actor C as Painel admin
+    participant AD as Servico<br/>Admin
+    participant V as Validador<br/>Conteudo
+    participant CR as Conteudo<br/>Repositorio
+
+    C->>AD: POST /api/admin/modulos/{id}/importacao<br/>{modulo?, questoes, confirmar, ignorarDuplicadas}
+    AD->>AD: exigirConteudo(ator) → 403 se não for ADMIN ou MASTER
+    AD->>CR: buscarModulo(id) → 404 se não existir
+    AD->>AD: máx. 500 questões e "modulo" do arquivo deve bater com o destino
+    AD->>CR: enunciados(id)
+    loop cada questão do arquivo
+        AD->>V: validarQuestao(q)
+        V-->>AD: questão normalizada ou erro
+        AD->>AD: enunciado repetido (módulo ou arquivo)? ignora ou erro
+    end
+    alt confirmar = false (validar e pré-visualizar)
+        AD-->>C: {total, validas, duplicadas, erros, previa, importado: false}
+        Note right of C: Nada foi gravado.
+    else confirmar = true e sem erros
+        rect rgb(224, 242, 254)
+            Note over AD,CR: Transação única
+            loop cada questão aceita
+                AD->>CR: inserirQuestao(id, q)
+            end
+        end
+        AD-->>C: {importado: true, importadas: N}
+        Note right of C: Qualquer exceção desfaz tudo.
+    else confirmar = true com erros
+        AD-->>C: {importado: false, erros} e nada é gravado
+    end

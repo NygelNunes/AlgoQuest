@@ -1,0 +1,43 @@
+classDiagram
+    direction TB
+
+    class ModuloResumoResposta {
+        <<record>>
+        id · titulo · descricao · tema
+        porcentagem · quantidadeExercicios
+        +de(Modulo, porcentagem)$
+    }
+    class ModuloDetalheResposta {
+        <<record>>
+        id · titulo · descricao · tema
+        List~ExercicioResposta~ exercicios
+        +de(Modulo m)$
+    }
+    class ResultadoResposta {
+        <<record>>
+        correta · feedback
+        pontosGanhos · usuario
+    }
+    class ExercicioResposta {
+        <<record · sem gabarito>>
+        id · descricao · opcoes
+        dificuldade · pontos · visual
+    }
+    class UsuarioResposta {
+        <<record>>
+        id · nomeUsuario · pontuacao
+        xp · nivel · xpProximoNivel
+        avatar · avatarImagem · papel · token
+        +de(Usuario)$
+        +comToken(Usuario, token)$
+    }
+
+    ModuloDetalheResposta *-- ExercicioResposta
+    ResultadoResposta o-- UsuarioResposta
+
+
+    style ModuloResumoResposta fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#000
+    style ModuloDetalheResposta fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#000
+    style ResultadoResposta fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#000
+    style ExercicioResposta fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#000
+    style UsuarioResposta fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#000

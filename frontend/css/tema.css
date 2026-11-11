@@ -1,0 +1,52 @@
+:root{
+  --theme-primary:#8e1c2c;     --theme-primary-hi:#b8283b;  --theme-primary-lo:#521019;
+  --theme-deep:#2e0a10;        --theme-luz:#c2354a;
+  --theme-secondary:#3f9a5a;   --theme-accent:#b9965a;      --theme-accent-hi:#e0c488;
+  --theme-background:#07080c;  --theme-surface:#0d0f15;     --theme-raised:#141720;
+  --theme-border:#262a35;      --theme-steel:#3d4453;       --theme-steel-lo:#2a2f3a;
+  --theme-muted:#9ca3b1;       --theme-glow:#12151d;
+  --theme-atmosfera:radial-gradient(900px 480px at 50% 112%,#8e1c2c26,transparent);
+  --retrato-bg:#000;
+}
+[data-tema="herois"]{
+  --theme-primary:#1f4a8c;     --theme-primary-hi:#3a68ae;  --theme-primary-lo:#102a58;
+  --theme-deep:#0b1b38;        --theme-luz:#4a78c4;
+  --theme-secondary:#2f8a6a;
+  --theme-atmosfera:radial-gradient(900px 480px at 50% 112%,#1f4a8c2e,transparent),radial-gradient(600px 360px at 8% -6%,#3a68ae1a,transparent);
+  --retrato-bg:
+    radial-gradient(120% 90% at 50% 0,#e6d08e1f,transparent 55%),
+    radial-gradient(circle at 50% 38%,#2c4d82 0,#17305a 52%,#0a1630 100%);
+}
+[data-tema="aldeoes"]{
+  --theme-primary:#7c4e12;     --theme-primary-hi:#9d661b;  --theme-primary-lo:#44270a;
+  --theme-deep:#2e1b07;        --theme-luz:#d09a42;
+  --theme-secondary:#7d8a4c;
+  --theme-atmosfera:radial-gradient(900px 480px at 50% 112%,#8a561430,transparent),radial-gradient(600px 360px at 92% -6%,#b0731f18,transparent);
+  --retrato-bg:
+    radial-gradient(120% 90% at 50% 0,#ffd28a22,transparent 55%),
+    repeating-linear-gradient(45deg,#ffffff07 0 2px,transparent 2px 6px),
+    radial-gradient(circle at 50% 38%,#6e4c27 0,#3d2913 58%,#1f150a 100%);
+}
+[data-tema="monstros"]{
+  --theme-primary:#8c1d2e;     --theme-primary-hi:#b52a3f;  --theme-primary-lo:#4d0f18;
+  --theme-deep:#2e0a10;        --theme-luz:#c0344d;
+  --theme-secondary:#5c1a2a;
+  --theme-atmosfera:radial-gradient(900px 480px at 50% 112%,#8c1d2e34,transparent),radial-gradient(600px 360px at 94% -6%,#5a141e22,transparent);
+  --retrato-bg:
+    radial-gradient(120% 90% at 50% 100%,#c0344d26,transparent 60%),
+    repeating-linear-gradient(115deg,#ff50700a 0 1px,transparent 1px 8px),
+    radial-gradient(circle at 50% 38%,#5c1a28 0,#2e0d16 56%,#12070b 100%);
+}
+:root,[data-tema]{
+  --accent:var(--theme-primary);   --accent-hi:var(--theme-primary-hi);  --accent-lo:var(--theme-primary-lo);
+  --accent-deep:var(--theme-deep); --accent-luz:var(--theme-luz);
+  --accent-fio:color-mix(in srgb,var(--theme-primary-hi) 55%,#000);
+  --accent-brilho:color-mix(in srgb,var(--theme-luz) 38%,transparent);
+  --crimson:var(--theme-primary); --crimson-hi:var(--theme-primary-hi); --crimson-lo:var(--theme-primary-lo);
+  --blood:var(--theme-deep); --gold:var(--theme-accent); --gold-hi:var(--theme-accent-hi); --moss:var(--theme-secondary);
+  --bg:var(--theme-background); --surface:var(--theme-surface); --raised:var(--theme-raised);
+  --line:var(--theme-border); --steel:var(--theme-steel); --steel-lo:var(--theme-steel-lo);
+  --muted:var(--theme-muted); --glow:var(--theme-glow);
+}
+html[data-tema] .perfil__retrato,html[data-tema] .mini{background:var(--retrato-bg)}
+html[data-tema] .perfil__moldura{--ang-cor:var(--theme-accent-hi)}

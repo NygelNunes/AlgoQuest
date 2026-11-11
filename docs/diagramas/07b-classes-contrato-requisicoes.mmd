@@ -1,0 +1,37 @@
+classDiagram
+    direction TB
+
+    class RequisicoesDeContaEJogo {
+        <<records>>
+        LoginRequisicao(nomeUsuario, senha)
+        RegistroRequisicao(nomeUsuario, senha)
+        RespostaRequisicao(resposta)
+        AvatarRequisicao(avatar, imagem)
+    }
+    class QuestaoRequisicao {
+        <<record>>
+        descricao · dificuldade · pontos
+        opcoes · indiceCorreto
+        explicacao · visual
+    }
+    class AdminDtos {
+        <<container de records>>
+        ModuloRequisicao · MoverRequisicao · PapelRequisicao
+        ImportacaoRequisicao · ImportacaoResposta · ErroImportacao
+        AdminModuloResposta · AdminQuestaoResposta · AdminUsuarioResposta
+    }
+    class ValidadorConteudo {
+        <<regras puras>>
+        +validarQuestao(QuestaoRequisicao)$
+    }
+
+    AdminDtos ..> QuestaoRequisicao : ImportacaoRequisicao contém lista
+    ValidadorConteudo ..> QuestaoRequisicao : valida e normaliza
+
+    note for RequisicoesDeContaEJogo "Entrada do cliente. Os campos são validados<br/>no serviço,<br/>nunca confiados: tamanho, formato e papel do<br/>ator."
+    note for AdminDtos "AdminQuestaoResposta expõe o gabarito<br/>(indiceCorreto e explicacao): só nas rotas<br/>/api/admin."
+
+    style RequisicoesDeContaEJogo fill:#dcfce7,stroke:#15803d,stroke-width:2px,color:#000
+    style QuestaoRequisicao fill:#dcfce7,stroke:#15803d,stroke-width:2px,color:#000
+    style AdminDtos fill:#dcfce7,stroke:#15803d,stroke-width:2px,color:#000
+    style ValidadorConteudo fill:#ede9fe,stroke:#6d28d9,stroke-width:2px,color:#000

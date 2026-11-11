@@ -1,0 +1,33 @@
+@font-face{font-family:'Cormorant Garamond';font-weight:500;font-style:italic;font-display:swap;src:url(../assets/fonts/cormorant-garamond-latin-500-italic.woff2) format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-weight:600;font-style:italic;font-display:swap;src:url(../assets/fonts/cormorant-garamond-latin-600-italic.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-weight:500;font-display:swap;src:url(../assets/fonts/inter-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'Cinzel';font-weight:600;font-display:swap;src:url(../assets/fonts/cinzel-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-weight:400;font-display:swap;src:url(../assets/fonts/inter-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-weight:600;font-display:swap;src:url(../assets/fonts/inter-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'UnifrakturCook';font-weight:700;font-display:block;src:url(../assets/fonts/unifrakturcook-latin-700-normal.woff2) format('woff2')}
+.i-activity{--i:url(../assets/icons/activity.svg)}
+.i-arrow-down-up{--i:url(../assets/icons/arrow-down-up.svg)}
+.i-arrow-right{--i:url(../assets/icons/arrow-right.svg)}
+.i-book-open{--i:url(../assets/icons/book-open.svg)}
+.i-camera{--i:url(../assets/icons/camera.svg)}
+.i-chevron-down{--i:url(../assets/icons/chevron-down.svg)}
+.i-circle-check{--i:url(../assets/icons/circle-check.svg)}
+.i-circle-x{--i:url(../assets/icons/circle-x.svg)}
+.i-crown{--i:url(../assets/icons/crown.svg)}
+.i-hash{--i:url(../assets/icons/hash.svg)}
+.i-layout-grid{--i:url(../assets/icons/layout-grid.svg)}
+.i-log-out{--i:url(../assets/icons/log-out.svg)}
+.i-map{--i:url(../assets/icons/map.svg)}
+.i-network{--i:url(../assets/icons/network.svg)}
+.i-scroll-text{--i:url(../assets/icons/scroll-text.svg)}
+.i-search{--i:url(../assets/icons/search.svg)}
+.i-star{--i:url(../assets/icons/star.svg)}
+.i-swords{--i:url(../assets/icons/swords.svg)}
+.i-zap{--i:url(../assets/icons/zap.svg)}
+
+.i-eye{--i:url(../assets/icons/eye.svg)}
+.i-eye-off{--i:url(../assets/icons/eye-off.svg)}
+.i-loader-circle{--i:url(../assets/icons/loader-circle.svg)}
+.i-triangle-alert{--i:url(../assets/icons/triangle-alert.svg)}
+.i-trophy{--i:url(../assets/icons/trophy.svg)}
+.i-flag{--i:url(../assets/icons/flag.svg)}

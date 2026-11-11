@@ -1,0 +1,43 @@
+classDiagram
+    direction TB
+
+    class ErroApi {
+        <<extends RuntimeException>>
+        -HttpStatus status
+        +requisicaoInvalida(msg)$ 400
+        +naoAutenticado(msg)$ 401
+        +proibido(msg)$ 403
+        +naoEncontrado(msg)$ 404
+        +conflito(msg)$ 409
+    }
+    class TratadorErros {
+        <<RestControllerAdvice>>
+        +erroApi(ErroApi) status do ErroApi
+        +corpoInvalido(...) 400
+        +metodoNaoSuportado(...) 405
+        +tipoNaoSuportado(...) 415
+        +inesperado(Exception) 500
+    }
+    class HashSenha {
+        <<Component>>
+        +gerar(senha) String
+        +verificar(senha, armazenado) boolean
+        +verificarFalso(senha)
+        +gerarToken()$ String
+        +hashDeToken(token)$ String
+    }
+    class UsuarioInicial {
+        <<Component · SmartInitializingSingleton>>
+        +afterSingletonsInstantiated()
+    }
+
+    TratadorErros ..> ErroApi : converte em resposta HTTP
+    UsuarioInicial --> HashSenha
+
+    note for HashSenha "PBKDF2-HMAC-SHA256 com salt.<br/>verificarFalso gasta o mesmo custo se o<br/>usuário não existe."
+    note for UsuarioInicial "Cria o Master na subida. Conta existente<br/>só é promovida se a senha conferir."
+
+    style ErroApi fill:#f1f5f9,stroke:#475569,stroke-width:2px,color:#000
+    style TratadorErros fill:#f1f5f9,stroke:#475569,stroke-width:2px,color:#000
+    style HashSenha fill:#f1f5f9,stroke:#475569,stroke-width:2px,color:#000
+    style UsuarioInicial fill:#f1f5f9,stroke:#475569,stroke-width:2px,color:#000

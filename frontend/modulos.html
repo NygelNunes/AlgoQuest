@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#07080b"><link rel="preload" href="assets/fonts/unifrakturcook-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/cinzel-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/inter-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="css/assets.css"><link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/avatares.css"><link rel="stylesheet" href="css/tema.css"><script src="js/avatares-catalogo.js"></script><script src="js/tema.js"></script><link rel="stylesheet" href="css/lab.css"><link rel="stylesheet" href="css/fantasia.css"><title>AlgoQuest - Módulos</title></head>
+<body class="pagina-app">
+  <div class="app">
+    <aside id="menu"></aside>
+    <main class="conteudo" id="conteudo">
+      <section class="quartel superficie" aria-labelledby="boasVindas">
+        <div class="quartel__cena" aria-hidden="true"></div>
+        <div class="quartel__topo">
+          <h1 id="boasVindas">Bem-vindo, Aventureiro!</h1>
+          <p class="lore">O conhecimento é a chave para desvendar os maiores mistérios deste reino.</p>
+          <a class="btn btn--primario btn--grande" id="btnContinuar" href="#listaModulos" hidden></a>
+        </div>
+        <dl class="visao" id="visaoGeral"></dl>
+      </section>
+      <a class="convite superficie" href="laboratorio.html" aria-label="Abrir o Grimório Vivo">
+        <span class="hex"><i class="ic i-book-open" aria-hidden="true"></i></span>
+        <span class="convite__txt"><b>Grimório Vivo</b><span>Veja ordenação, busca, hash e árvores AVL em ação — passo a passo, com rotações animadas e um modo para apostar no próximo movimento.</span></span>
+        <span class="btn btn--fantasma">Abrir o Grimório <i class="ic i-arrow-right" aria-hidden="true"></i></span>
+      </a>
+      <section aria-labelledby="tituloCentral">
+        <div class="secao__titulo"><h2 id="tituloCentral"><i class="ic i-scroll-text" aria-hidden="true"></i>Central de Desafios</h2>
+          <div class="alterna" id="alterna" role="group" aria-label="Modo de visualização">
+            <button type="button" data-vista="cartoes" aria-pressed="true"><i class="ic i-layout-grid" aria-hidden="true"></i>Cartões</button>
+            <button type="button" data-vista="mapa" aria-pressed="false"><i class="ic i-map" aria-hidden="true"></i>Mapa</button></div></div>
+        <div id="listaModulos" aria-live="polite"><p class="estado">Carregando...</p></div>
+      </section>
+    </main>
+    <aside id="perfil" aria-label="Personagem"></aside>
+  </div>
+  <script src="js/api.js"></script><script src="js/arte.js"></script><script src="js/ui.js"></script><script src="js/avatares.js"></script><script src="js/modulos.js"></script>
+</body></html>

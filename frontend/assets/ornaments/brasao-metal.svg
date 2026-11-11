@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 160" fill="none">
+<defs>
+<linearGradient id="o" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1dba4"/><stop offset=".45" stop-color="#b48a47"/><stop offset="1" stop-color="#4a3718"/></linearGradient>
+<linearGradient id="ob" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4e2b0"/><stop offset=".5" stop-color="#c9a45f"/><stop offset="1" stop-color="#7a5a2c"/></linearGradient>
+<linearGradient id="lm" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e9ecf0"/><stop offset=".5" stop-color="#9aa1ad"/><stop offset=".5" stop-color="#5d6470"/><stop offset="1" stop-color="#2c313a"/></linearGradient>
+</defs>
+<!-- aro metálico: ouro velho gravado -->
+<path d="M14 21Q37 23 60 12Q83 23 106 21V73C106 107 86 130 60 145C34 130 14 107 14 73Z" stroke="#000" stroke-opacity=".75" stroke-width="9.4" stroke-linejoin="round"/>
+<path d="M14 21Q37 23 60 12Q83 23 106 21V73C106 107 86 130 60 145C34 130 14 107 14 73Z" stroke="url(#o)" stroke-width="7.4" stroke-linejoin="round"/>
+<path d="M14 21Q37 23 60 12Q83 23 106 21V73C106 107 86 130 60 145C34 130 14 107 14 73Z" stroke="#2a1d0c" stroke-opacity=".65" stroke-width="1" stroke-linejoin="round" transform="translate(60 78) scale(.945) translate(-60 -78)"/>
+<path d="M14 21Q37 23 60 12Q83 23 106 21V73C106 107 86 130 60 145C34 130 14 107 14 73Z" stroke="#fff3cf" stroke-opacity=".38" stroke-width=".7" stroke-linejoin="round" transform="translate(60 78) scale(1.045) translate(-60 -78)"/>
+<!-- filete interno gravado sobre o campo -->
+<path d="M14 21Q37 23 60 12Q83 23 106 21V73C106 107 86 130 60 145C34 130 14 107 14 73Z" stroke="#d8b872" stroke-opacity=".55" stroke-width=".8" transform="translate(60 78) scale(.84) translate(-60 -78)"/>
+<!-- argola de suspensão e rebites -->
+<circle cx="60" cy="6.2" r="4.2" stroke="#000" stroke-opacity=".7" stroke-width="3.4"/><circle cx="60" cy="6.2" r="4.2" stroke="url(#ob)" stroke-width="2.2"/>
+<path d="M60 10.6V13" stroke="url(#ob)" stroke-width="2"/>
+<g fill="url(#o)" stroke="#000" stroke-opacity=".6" stroke-width=".6"><circle cx="21" cy="27" r="1.9"/><circle cx="99" cy="27" r="1.9"/><circle cx="60" cy="148.4" r="2.2"/></g>
+<!-- astrolábio com grafo pentagonal -->
+<circle cx="60" cy="78" r="26.5" stroke="#000" stroke-opacity=".5" stroke-width="2.6"/>
+<circle cx="60" cy="78" r="26.5" stroke="url(#ob)" stroke-width="1.5"/>
+<circle cx="60" cy="78" r="21" stroke="#d8b872" stroke-opacity=".75" stroke-width=".7" stroke-dasharray="1.3 2.6"/>
+<g stroke="#d8b872" stroke-opacity=".85" stroke-width=".9" stroke-linecap="round"><path d="M82.0 78.0L86.5 78.0"/><path d="M79.1 89.0L82.9 91.2"/><path d="M71.0 97.1L73.2 100.9"/><path d="M60.0 100.0L60.0 104.5"/><path d="M49.0 97.1L46.8 100.9"/><path d="M40.9 89.0L37.1 91.2"/><path d="M38.0 78.0L33.5 78.0"/><path d="M40.9 67.0L37.1 64.8"/><path d="M49.0 58.9L46.7 55.1"/><path d="M60.0 56.0L60.0 51.5"/><path d="M71.0 58.9L73.2 55.1"/><path d="M79.1 67.0L82.9 64.7"/></g>
+<path d="M60.0 61.0L70.0 91.8L43.8 72.7L76.2 72.7L50.0 91.8L60.0 61.0" stroke="#e6cc90" stroke-opacity=".8" stroke-width=".9" stroke-linejoin="round"/>
+<circle cx="60.0" cy="61.0" r="2.1" fill="url(#o)"/><circle cx="76.2" cy="72.7" r="2.1" fill="url(#o)"/><circle cx="70.0" cy="91.8" r="2.1" fill="url(#o)"/><circle cx="50.0" cy="91.8" r="2.1" fill="url(#o)"/><circle cx="43.8" cy="72.7" r="2.1" fill="url(#o)"/>
+<!-- espada em pala: lâmina bipartida, guarda curva, empunhadura e pomo -->
+<g stroke-linejoin="round">
+<path d="M60 22L63.2 36V105H56.8V36Z" fill="#000" fill-opacity=".55" stroke="#000" stroke-opacity=".55" stroke-width="2"/>
+<path d="M60 22L56.8 36V105H60Z" fill="url(#lm)" transform="translate(0 0)"/>
+<path d="M60 22L63.2 36V105H60Z" fill="#69707c"/><path d="M60 22L63.2 36V105H60Z" fill="url(#lm)" opacity=".0"/>
+<path d="M60 26V104" stroke="#0c0d11" stroke-opacity=".5" stroke-width=".6"/>
+<path d="M44 106.5Q52 101.5 60 104.5Q68 101.5 76 106.5Q68 108.6 60 107.8Q52 108.6 44 106.5Z" fill="url(#o)" stroke="#000" stroke-opacity=".7" stroke-width=".9"/>
+<circle cx="44" cy="106.5" r="1.9" fill="url(#o)" stroke="#000" stroke-opacity=".7" stroke-width=".7"/><circle cx="76" cy="106.5" r="1.9" fill="url(#o)" stroke="#000" stroke-opacity=".7" stroke-width=".7"/>
+<rect x="58.4" y="107.8" width="3.2" height="11" rx="1" fill="#3b2a14" stroke="#000" stroke-opacity=".6" stroke-width=".6"/>
+<path d="M58.4 110.4h3.2M58.4 113h3.2M58.4 115.6h3.2" stroke="#c9a45f" stroke-opacity=".7" stroke-width=".5"/>
+<circle cx="60" cy="122.2" r="3.1" fill="url(#o)" stroke="#000" stroke-opacity=".7" stroke-width=".8"/>
+</g>
+</svg>

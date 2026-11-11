@@ -1,0 +1,59 @@
+erDiagram
+    usuario ||--o{ sessao : "abre (CASCADE)"
+    usuario ||--o{ progresso_usuario : "conclui (CASCADE)"
+    modulo ||--o{ exercicio : "contém (CASCADE)"
+    exercicio ||--o{ progresso_usuario : "é concluído em (CASCADE)"
+    exercicio ||--o| exercicio_multipla_escolha : "1 por exercício (CASCADE)"
+    exercicio ||--|{ exercicio_opcao : "alternativas (CASCADE)"
+
+    usuario {
+        int id PK
+        varchar nome_usuario UK "até 50"
+        varchar senha_hash "PBKDF2-SHA256"
+        int pontuacao
+        int xp
+        int nivel
+        varchar papel "USUARIO ADMIN MASTER (V5)"
+        varchar avatar "id do catálogo ou personalizado (V4)"
+        text avatar_imagem "data URL, só se personalizado (V4)"
+        timestamp criado_em
+    }
+    sessao {
+        varchar token_hash PK "SHA-256 do token"
+        int usuario_id FK
+        timestamp criada_em
+        timestamp expira_em
+    }
+    modulo {
+        int id PK
+        varchar titulo
+        varchar descricao
+        int ordem
+        boolean ativo
+        varchar tema "chave da ilustração, NULL = deduzida do título (V5)"
+    }
+    exercicio {
+        int id PK
+        int modulo_id FK
+        int ordem
+        varchar tipo "MULTIPLA_ESCOLHA"
+        varchar descricao
+        varchar dificuldade "FACIL MEDIO DIFICIL"
+        int pontos
+        varchar texto_feedback
+        text visual "imagem ou SVG validado (V5)"
+    }
+    exercicio_multipla_escolha {
+        int exercicio_id PK, FK
+        int indice_correto
+    }
+    exercicio_opcao {
+        int exercicio_id PK, FK
+        int indice PK
+        varchar texto
+    }
+    progresso_usuario {
+        int usuario_id PK, FK
+        int exercicio_id PK, FK
+        timestamp concluido_em
+    }

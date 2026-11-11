@@ -1,0 +1,40 @@
+classDiagram
+    direction TB
+
+    class ProgressoRepositorio {
+        <<Repository>>
+        +buscarPorUsuario(int idUsuario) ProgressoUsuario
+        +registrarConclusao(int idUsuario, int idExercicio)
+    }
+    class SessaoRepositorio {
+        <<Repository>>
+        +criar(tokenHash, idUsuario, expiraEm)
+        +buscarIdUsuarioValido(tokenHash, agora) Integer
+        +remover(String tokenHash)
+        +removerExpiradas(Instant agora)
+    }
+    class ConteudoRepositorio {
+        <<Repository · administração>>
+        +listarModulos() · buscarModulo(id)
+        +inserirModulo · atualizarModulo · excluirModulo
+        +listarQuestoes(moduloId) · buscarQuestao(id)
+        +inserirQuestao · atualizarQuestao · excluirQuestao
+        +gravarOrdemModulos · gravarOrdemQuestoes
+        +enunciados(moduloId) · listarUsuarios()
+    }
+    class JdbcTemplate {
+        <<Spring JDBC>>
+    }
+
+    ProgressoRepositorio ..> JdbcTemplate
+    SessaoRepositorio ..> JdbcTemplate
+    ConteudoRepositorio ..> JdbcTemplate
+
+    note for ProgressoRepositorio "Contrato próprio, sem CRUD genérico:<br/>não implementa Repositorio&lt;T&gt;."
+    note for SessaoRepositorio "Guarda só o SHA-256 do token,<br/>nunca o token em si."
+    note for ConteudoRepositorio "Lado de escrita do painel admin.<br/>Devolve DTOs, não o agregado Modulo.<br/>As transações ficam em ServicoAdmin."
+
+    style ProgressoRepositorio fill:#ffedd5,stroke:#c2410c,stroke-width:2px,color:#000
+    style SessaoRepositorio fill:#ffedd5,stroke:#c2410c,stroke-width:2px,color:#000
+    style ConteudoRepositorio fill:#ffedd5,stroke:#c2410c,stroke-width:2px,color:#000
+    style JdbcTemplate fill:#f1f5f9,stroke:#475569,stroke-width:2px,color:#000

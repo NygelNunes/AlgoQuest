@@ -1,0 +1,52 @@
+classDiagram
+    direction TB
+
+    class LoginController {
+        <<RestController /api/auth>>
+        +login(LoginRequisicao) UsuarioResposta
+        +registrar(RegistroRequisicao) UsuarioResposta
+        +logout()
+        +eu(Usuario) UsuarioResposta
+        +escolherAvatar(Usuario, AvatarRequisicao) UsuarioResposta
+        +enviarAvatar(Usuario, AvatarRequisicao) UsuarioResposta
+    }
+    class ServicoAutenticacao {
+        <<Service>>
+        +login(nome, senha) UsuarioResposta
+        +registrar(nome, senha) UsuarioResposta
+        +autenticar(cabecalho) Usuario
+        +logout(cabecalho)
+    }
+    class ServicoAvatar {
+        <<Service>>
+        +sortearPadrao(nome) String
+        +garantirAvatar(Usuario)
+        +escolher(Usuario, id) Usuario
+        +enviarPersonalizado(Usuario, dataUrl) Usuario
+        +comImagem(Usuario) Usuario
+    }
+    class UsuarioRepositorio
+    class SessaoRepositorio
+    class HashSenha
+    class Avatar {
+        <<regras puras>>
+    }
+
+    LoginController --> ServicoAutenticacao
+    LoginController --> ServicoAvatar
+    ServicoAutenticacao --> ServicoAvatar : garantirAvatar no login
+    ServicoAutenticacao --> UsuarioRepositorio
+    ServicoAutenticacao --> SessaoRepositorio
+    ServicoAutenticacao --> HashSenha
+    ServicoAvatar --> UsuarioRepositorio
+    ServicoAvatar ..> Avatar : sorteio e validação
+
+    note for ServicoAutenticacao "autenticar() é chamado por<br/>ResolvedorUsuarioAutenticado<br/>em toda rota protegida: token → SHA-256 →<br/>sessão → Usuario."
+
+    style LoginController fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#000
+    style ServicoAutenticacao fill:#dcfce7,stroke:#15803d,stroke-width:2px,color:#000
+    style ServicoAvatar fill:#dcfce7,stroke:#15803d,stroke-width:2px,color:#000
+    style UsuarioRepositorio fill:#ffedd5,stroke:#c2410c,stroke-width:2px,color:#000
+    style SessaoRepositorio fill:#ffedd5,stroke:#c2410c,stroke-width:2px,color:#000
+    style HashSenha fill:#f1f5f9,stroke:#475569,stroke-width:2px,color:#000
+    style Avatar fill:#ede9fe,stroke:#6d28d9,stroke-width:2px,color:#000

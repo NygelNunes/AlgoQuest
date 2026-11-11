@@ -1,0 +1,41 @@
+classDiagram
+    direction TB
+
+    class ConfigWeb {
+        <<Component>>
+        +addCorsMappings(CorsRegistry)
+        +addArgumentResolvers(List)
+    }
+    class WebMvcConfigurer {
+        <<Spring · interface>>
+    }
+    class ResolvedorUsuarioAutenticado {
+        <<Component>>
+        +supportsParameter(MethodParameter) boolean
+        +resolveArgument(...) Usuario
+    }
+    class HandlerMethodArgumentResolver {
+        <<Spring · interface>>
+    }
+    class UsuarioAutenticado {
+        <<annotation>>
+    }
+    class ServicoAutenticacao {
+        <<Service>>
+        +autenticar(cabecalho) Usuario
+    }
+
+    ConfigWeb ..|> WebMvcConfigurer
+    ResolvedorUsuarioAutenticado ..|> HandlerMethodArgumentResolver
+    ConfigWeb --> ResolvedorUsuarioAutenticado : registra
+    ResolvedorUsuarioAutenticado ..> UsuarioAutenticado : procura a anotação
+    ResolvedorUsuarioAutenticado --> ServicoAutenticacao : token → Usuario
+
+    note for UsuarioAutenticado "Marca o parâmetro Usuario de um método de<br/>controller.<br/>Sem ela o parâmetro não é resolvido: o<br/>controller<br/>nunca lê o papel nem o id de dados da<br/>requisição."
+
+    style ConfigWeb fill:#f1f5f9,stroke:#475569,stroke-width:2px,color:#000
+    style ResolvedorUsuarioAutenticado fill:#f1f5f9,stroke:#475569,stroke-width:2px,color:#000
+    style UsuarioAutenticado fill:#f1f5f9,stroke:#475569,stroke-width:2px,color:#000
+    style ServicoAutenticacao fill:#dcfce7,stroke:#15803d,stroke-width:2px,color:#000
+    style WebMvcConfigurer fill:#fef3c7,stroke:#b45309,stroke-width:1px,color:#000
+    style HandlerMethodArgumentResolver fill:#fef3c7,stroke:#b45309,stroke-width:1px,color:#000

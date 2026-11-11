@@ -1,0 +1,2 @@
+CREATE USER algoquest WITH PASSWORD :'senha';
+CREATE DATABASE algoquest OWNER algoquest ENCODING 'UTF8';

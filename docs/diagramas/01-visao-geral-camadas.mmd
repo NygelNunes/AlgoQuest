@@ -1,0 +1,23 @@
+flowchart LR
+    FE["<b>Frontend</b><br/>HTML · CSS · JS puro<br/>pasta frontend/<br/><br/>login.js · modulos.js<br/>exercicio.js · lab.js<br/>admin.js<br/><br/>api.js (Api) · ui.js<br/>tema.js · arte.js"]
+    WEB["<b>Controllers</b><br/>pacote controller<br/><br/>LoginController<br/>/api/auth<br/>ModuloController<br/>/api/modulos<br/>AdminController<br/>/api/admin"]
+    SVC["<b>Serviços</b><br/>pacote service<br/><br/>ServicoAutenticacao<br/>ServicoAvatar<br/>ServicoModulo<br/>ServicoResposta<br/>ServicoGamificacao<br/>ServicoAdmin"]
+    REP["<b>Repositórios</b><br/>pacote repository<br/>JDBC puro<br/><br/>UsuarioRepositorio<br/>ModuloRepositorio<br/>ProgressoRepositorio<br/>SessaoRepositorio<br/>ConteudoRepositorio"]
+    DB[("<b>Banco</b><br/>H2 ou PostgreSQL<br/>esquema Flyway<br/>V1 … V5")]
+    DOM["<b>Domínio</b><br/>pacote model<br/><br/>Usuario · Modulo<br/>Exercicio · Papel<br/>ProgressoUsuario<br/>Avatar · Visual<br/>ValidadorConteudo"]
+    INF["<b>Infraestrutura</b><br/>config · exception · util<br/><br/>ConfigWeb<br/>ResolvedorUsuarioAutenticado<br/>TratadorErros · ErroApi<br/>HashSenha · UsuarioInicial"]
+
+    FE -->|"HTTP + JSON<br/>Bearer token"| WEB
+    WEB -->|"DTOs<br/>(pacote dto)"| SVC
+    SVC --> REP
+    REP --> DB
+    SVC -->|"entidades<br/>e regras"| DOM
+    INF -.->|"autentica,<br/>valida e<br/>traduz erros"| WEB
+
+    style FE fill:#fef3c7,stroke:#b45309,color:#000
+    style WEB fill:#e0f2fe,stroke:#0284c7,color:#000
+    style SVC fill:#dcfce7,stroke:#15803d,color:#000
+    style REP fill:#ffedd5,stroke:#c2410c,color:#000
+    style DB fill:#fce7f3,stroke:#be185d,color:#000
+    style DOM fill:#ede9fe,stroke:#6d28d9,color:#000
+    style INF fill:#f1f5f9,stroke:#475569,color:#000

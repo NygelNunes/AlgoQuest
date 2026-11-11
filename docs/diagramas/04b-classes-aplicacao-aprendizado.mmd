@@ -1,0 +1,45 @@
+classDiagram
+    direction TB
+
+    class ModuloController {
+        <<RestController /api/modulos>>
+        +listar(Usuario) List~ModuloResumoResposta~
+        +abrir(Usuario, id) ModuloDetalheResposta
+        +responder(Usuario, id, RespostaRequisicao) ResultadoResposta
+    }
+    class ServicoModulo {
+        <<Service>>
+        +listar(Usuario) List~ModuloResumoResposta~
+        +abrir(int idModulo) ModuloDetalheResposta
+    }
+    class ServicoResposta {
+        <<Service>>
+        +responder(Usuario, idExercicio, resposta) ResultadoResposta
+    }
+    class ServicoGamificacao {
+        <<Service>>
+        +processarRespostaCorreta(Usuario, Exercicio)
+    }
+    class ModuloRepositorio
+    class ProgressoRepositorio
+    class UsuarioRepositorio
+
+    ModuloController --> ServicoModulo
+    ModuloController --> ServicoResposta
+    ServicoModulo --> ModuloRepositorio : só módulos ativos
+    ServicoModulo --> ProgressoRepositorio : % concluída
+    ServicoResposta --> ModuloRepositorio : buscarExercicioPorId
+    ServicoResposta --> ProgressoRepositorio
+    ServicoResposta --> UsuarioRepositorio : FOR UPDATE
+    ServicoResposta --> ServicoGamificacao
+
+    note for ServicoResposta "Chama Exercicio.verificarResposta<br/>(polimorfismo) fora da<br/>transação. Só abre TransactionTemplate se a<br/>resposta<br/>está correta: cada exercício premia 1 vez<br/>por usuário."
+    note for ServicoGamificacao "Concede pontos e o mesmo valor em XP.<br/>A subida de nível é regra de Usuario."
+
+    style ModuloController fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#000
+    style ServicoModulo fill:#dcfce7,stroke:#15803d,stroke-width:2px,color:#000
+    style ServicoResposta fill:#dcfce7,stroke:#15803d,stroke-width:2px,color:#000
+    style ServicoGamificacao fill:#dcfce7,stroke:#15803d,stroke-width:2px,color:#000
+    style ModuloRepositorio fill:#ffedd5,stroke:#c2410c,stroke-width:2px,color:#000
+    style ProgressoRepositorio fill:#ffedd5,stroke:#c2410c,stroke-width:2px,color:#000
+    style UsuarioRepositorio fill:#ffedd5,stroke:#c2410c,stroke-width:2px,color:#000

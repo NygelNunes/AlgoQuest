@@ -1,0 +1,49 @@
+classDiagram
+    direction TB
+
+    class AdminController {
+        <<RestController /api/admin>>
+        +modulos() · criarModulo() · editarModulo() · excluirModulo() · moverModulo()
+        +questoes() · criarQuestao() · editarQuestao() · excluirQuestao() · moverQuestao()
+        +importar(id, ImportacaoRequisicao) ImportacaoResposta
+        +usuarios() · papel(id, PapelRequisicao)
+    }
+    class ServicoAdmin {
+        <<Service>>
+        -exigirConteudo(ator) «ADMIN ou MASTER»
+        -exigirMaster(ator) «somente MASTER»
+        +listarModulos / criarModulo / editarModulo / excluirModulo / moverModulo
+        +listarQuestoes / criarQuestao / editarQuestao / excluirQuestao / moverQuestao
+        +importar(ator, moduloId, ImportacaoRequisicao) ImportacaoResposta
+        +listarUsuarios(ator) List~AdminUsuarioResposta~
+        +alterarPapel(ator, idAlvo, papel) AdminUsuarioResposta
+    }
+    class ConteudoRepositorio
+    class UsuarioRepositorio
+    class TransactionTemplate {
+        <<Spring>>
+    }
+    class ValidadorConteudo {
+        <<regras puras>>
+    }
+    class Papel {
+        <<enumeration>>
+        +validarAlteracao(...)$ String
+    }
+
+    AdminController --> ServicoAdmin
+    ServicoAdmin --> ConteudoRepositorio : módulos, questões, usuários
+    ServicoAdmin --> UsuarioRepositorio : atualizarPapel
+    ServicoAdmin --> TransactionTemplate : ordem, edição e importação
+    ServicoAdmin ..> ValidadorConteudo : valida módulo e questão
+    ServicoAdmin ..> Papel : regras de promoção
+
+    note for ServicoAdmin "Toda operação recebe o ator (Usuario<br/>autenticado, papel lido do banco)<br/>e começa exigindo o papel. Falha =<br/>ErroApi.proibido (403).<br/>O Master é protegido: ninguém o altera nem<br/>promove outro a Master."
+
+    style AdminController fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#000
+    style ServicoAdmin fill:#dcfce7,stroke:#15803d,stroke-width:2px,color:#000
+    style ConteudoRepositorio fill:#ffedd5,stroke:#c2410c,stroke-width:2px,color:#000
+    style UsuarioRepositorio fill:#ffedd5,stroke:#c2410c,stroke-width:2px,color:#000
+    style TransactionTemplate fill:#f1f5f9,stroke:#475569,stroke-width:2px,color:#000
+    style ValidadorConteudo fill:#ede9fe,stroke:#6d28d9,stroke-width:2px,color:#000
+    style Papel fill:#ffedd5,stroke:#c2410c,stroke-width:2px,color:#000

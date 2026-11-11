@@ -1,0 +1,69 @@
+classDiagram
+    direction TB
+
+    class Avatar {
+        <<utility · final>>
+        +String PERSONALIZADO = "personalizado"
+        +int MAX_BYTES_IMAGEM = 150 KB
+        +idDoCatalogo(String id)$ boolean
+        +padraoPara(String nomeUsuario, RandomGenerator r)$ String
+        +validarImagem(String dataUrl)$ String
+        +validarImagem(String dataUrl, int maxBytes)$ String
+    }
+
+    class AvatarIds {
+        <<gerado · package-private>>
+        ~String[] TODOS «48 ids»
+        ~String[] FEMININOS
+        ~String[] MASCULINOS
+    }
+
+    class Visual {
+        <<utility · final>>
+        +int MAX_BYTES_IMAGEM = 300 KB
+        +int MAX_CARACTERES_SVG = 30000
+        +validar(String bruto)$ String
+        -validarSvg(String svg)$ String
+        -conferir(Element e)$ void
+    }
+
+    class ValidadorConteudo {
+        <<utility · final>>
+        +Set~String~ TEMAS
+        +int MAX_QUESTOES_IMPORTACAO = 500
+        +validarModulo(titulo, descricao, tema)$ String
+        +validarQuestao(QuestaoRequisicao q)$ QuestaoRequisicao
+        +dificuldade(String texto)$ Dificuldade
+        +pontosPadrao(Dificuldade d)$ int
+        +chave(String descricao)$ String
+    }
+
+    class Papel {
+        <<enumeration>>
+        +validarAlteracao(...)$ String
+    }
+
+    class Dificuldade {
+        <<enumeration>>
+    }
+
+    class QuestaoRequisicao {
+        <<record · dto>>
+    }
+
+    Avatar ..> AvatarIds : lê a lista de ids
+    Visual ..> Avatar : validarImagem(dataUrl, max)
+    ValidadorConteudo ..> Visual : valida o recurso visual
+    ValidadorConteudo ..> QuestaoRequisicao : valida e normaliza
+    ValidadorConteudo ..> Dificuldade
+
+    note for Visual "SVG por lista de permissão: sem script,<br/>foreignObject,<br/>eventos on*, href externo, DOCTYPE ou<br/>entidades."
+    note for ValidadorConteudo "Mesma validação para edição manual e<br/>importação em lote."
+    note for AvatarIds "Gerado por tools/gerar_avatares.py. Não<br/>editar à mão."
+
+    style Avatar fill:#ede9fe,stroke:#6d28d9,stroke-width:2px,color:#000
+    style Visual fill:#ede9fe,stroke:#6d28d9,stroke-width:2px,color:#000
+    style ValidadorConteudo fill:#ede9fe,stroke:#6d28d9,stroke-width:2px,color:#000
+    style Papel fill:#ede9fe,stroke:#6d28d9,stroke-width:2px,color:#000
+    style AvatarIds fill:#f1f5f9,stroke:#475569,stroke-width:2px,color:#000
+    style QuestaoRequisicao fill:#f1f5f9,stroke:#475569,stroke-width:2px,color:#000
