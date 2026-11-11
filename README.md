@@ -12,6 +12,53 @@ O **AlgoQuest** é um software educacional desenvolvido como projeto acadêmico.
 
 ---
 
+---
+
+## 🖼️ Visão geral da interface
+
+Abaixo estão algumas telas principais do AlgoQuest. As imagens ficam na pasta [`screenshots/`](screenshots/), localizada na raiz do repositório.
+
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <img src="screenshots/Login.png" alt="Tela de Login" width="100%">
+      <br>
+      <strong>🔐 Login</strong>
+    </td>
+    <td width="50%" align="center">
+      <img src="screenshots/Home.png" alt="Tela inicial do AlgoQuest" width="100%">
+      <br>
+      <strong>🏠 Home</strong>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="screenshots/Avatar.png" alt="Tela de seleção de avatar" width="100%">
+      <br>
+      <strong>🧙 Avatar</strong>
+    </td>
+    <td width="50%" align="center">
+      <img src="screenshots/Modulo_Exercisc.png" alt="Tela de módulo e exercícios" width="100%">
+      <br>
+      <strong>📚 Módulo e Exercícios</strong>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="screenshots/Grimorio_Vivo.png" alt="Tela do Grimório Vivo" width="100%">
+      <br>
+      <strong>🔮 Grimório Vivo</strong>
+    </td>
+    <td width="50%" align="center">
+      <img src="screenshots/Administracao_Mestre.png" alt="Painel de administração Master" width="100%">
+      <br>
+      <strong>⚙️ Administração Mestre</strong>
+    </td>
+  </tr>
+</table>
+
+---
+
 ## 🔮 Grimório Vivo (simuladores visuais)
 
 Página `frontend/laboratorio.html` com simulações **passo a passo, em português**: Bubble Sort, Busca Binária, Tabela Hash (encadeamento), Árvore Binária de Busca e Árvore AVL (fatores de balanceamento e rotações animadas). Recursos: reproduzir/pausar/voltar/linha do tempo, dados editáveis, **Modo Desafio** (preveja o próximo passo para ganhar maestria — Noviço, Adepto, Mestre) e **ordenar à mão** (Bubble Sort). Nos exercícios, o botão **Ver na prática** abre o simulador correspondente. Frontend puro (sem build); a maestria fica no `localStorage`. Testes: `node dev-tools/testes/lab-sims.test.js`.
@@ -45,6 +92,7 @@ A gamificação existe para incentivar, sem tornar o sistema um jogo complexo. O
 
 ```
 AlgoQuest/
+├── screenshots/           imagens das principais telas do sistema
 ├── pom.xml · docker-compose.yml · .env.example
 ├── database/00_criar_banco_postgresql.sql   cria banco e usuário no PostgreSQL instalado
 ├── src/main/java/algoquest/
